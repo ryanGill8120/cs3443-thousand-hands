@@ -1,0 +1,97 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+
+/* Main.fxml elements */
+#mainHomeBtn{
+	-fx-background-image:url("HomeIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#inventoryBtn{
+	-fx-background-image:url("InventoryIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#needBtn{
+	-fx-background-image:url("NeedIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#giveBtn{
+	-fx-background-image:url("GiveIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#aboutBtn{
+	-fx-background-image:url("HandIcon.jpg");
+	-fx-background-size:100% 100%;
+}
+
+/* NeedGive.fxml elements */
+#needHomeBtn{
+	-fx-background-image:url("HomeIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#needInvBtn{
+	-fx-background-image:url("InventoryIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#userBtn{
+	-fx-background-image:url("UserIcon.jpg");
+	-fx-background-size:100% 100%;
+}
+
+#productBtn{
+	-fx-background-image:url("CartIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#quantityBtn{
+	-fx-background-image:url("QuantityIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#addSubBtn{
+	-fx-background-image:url("AddSubIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+/* Inventory.fxml elements */
+
+#invHomeBtn{
+	-fx-background-image:url("HomeIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#invInventoryBtn{
+	-fx-background-image:url("InventoryIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#searchBtn{
+	-fx-background-image:url("SearchIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+#showAllBtn{
+	-fx-background-image:url("QuantityIcon.png");
+	-fx-background-size:100% 100%;
+}
+
+
+/* Global Elements */
+.root{
+	-fx-background-color:rgba(148, 211, 247, 1);
+}
+
+.button:hover {
+    -fx-scale-y: 1.1;
+    -fx-scale-x: 1.1;
+}
+
+.button:pressed {
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}

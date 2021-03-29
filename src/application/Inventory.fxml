@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="inventoryPane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.NeedGiveController">
+   <children>
+      <AnchorPane prefHeight="600.0" prefWidth="600.0" stylesheets="@../../bin/application/application.css">
+         <children>
+            <Button fx:id="invHomeBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#inventoryToHome" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Home" />
+               </tooltip></Button>
+            <ListView fx:id="inventoryList" layoutX="275.0" layoutY="158.0" prefHeight="395.0" prefWidth="281.0" />
+            <Button fx:id="showAllBtn" layoutX="366.0" layoutY="41.0" mnemonicParsing="false" onAction="#showAll" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Show All Inventory" />
+               </tooltip></Button>
+            <TextField fx:id="userSearch" layoutX="23.0" layoutY="222.0" prefHeight="63.0" prefWidth="210.0">
+               <font>
+                  <Font size="20.0" />
+               </font></TextField>
+            <TextField fx:id="itemSearch" layoutX="24.0" layoutY="341.0" prefHeight="63.0" prefWidth="210.0">
+               <font>
+                  <Font size="20.0" />
+               </font></TextField>
+            <Button fx:id="searchBtn" layoutX="80.0" layoutY="433.0" mnemonicParsing="false" onAction="#searchInventory" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Search" />
+               </tooltip></Button>
+            <Button fx:id="invInventoryBtn" layoutX="129.0" layoutY="14.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Inventory" />
+               </tooltip>
+            </Button>
+            <Label layoutX="76.0" layoutY="175.0" text="Username">
+               <font>
+                  <Font size="25.0" />
+               </font></Label>
+            <Label layoutX="104.0" layoutY="294.0" text="Item">
+               <font>
+                  <Font size="25.0" />
+               </font></Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
