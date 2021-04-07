@@ -12,18 +12,31 @@ import java.util.Properties;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/********************************************************************
+ * 			NeedGiveController - Covid-19 Donation app
+ ********************************************************************
+ *Purpose:
+ *		Model class for data storage and retrieval. Also contains an 
+ *      init function to set data if the properties.data file is not
+ *      present.  
+ *
+ *Notes:
+ *		I chose to make attributes of the class static so that instantiation
+ *		would not be required each time there was a call to one of the files.
+ *		This way, we are not constantly loading new Properties, HashMap, FileWriter etc.
+ *		into memory by making these instantiations local to their functions. Also,
+ *		The process of switching between need/give options involves the static need flag  
+ *
+ ********************************************************************
+ */
+
 public class Models {
 	
+	//Instantiations of all classes used in data structure for the app
 	protected static boolean need = true;
-	
 	protected static HashMap<String, String> hash = new HashMap<String, String>();
     protected static Properties prop = new Properties();
     protected static File file = new File("data.properties");
-    
-    
-	protected static ArrayList<String> users = new ArrayList<String>();
-	protected static ArrayList<String> items = new ArrayList<String>();
-	protected static ArrayList<Integer> amounts = new ArrayList<Integer>();
 	protected static ObservableList<String> obsInventory = FXCollections.observableArrayList();
 	
 	//development method, used to create an initial inventory for the user
@@ -44,10 +57,27 @@ public class Models {
 		
 	}
 	
+	/*********************************************
+	 * 				loadFile()
+	 *********************************************
+	 *
+	 *	Parameters:
+	 *		none
+	 *	Return Type: 
+	 *		none
+	 *
+	 *	used to load the data.properties file at app
+	 *  launch (called in main)
+	 *********************************************
+	 */
 	protected static void loadFile() throws IOException{
+		
+		//loads the file from application directory
 		FileInputStream reader=new FileInputStream(file);
 		prop.load(reader);
 		reader.close();
+		
+		//iterates through the file and adds values to HashMap
 		for(Object key: prop.stringPropertyNames()){
         	hash.put(key.toString(), prop.get(key).toString());
         }

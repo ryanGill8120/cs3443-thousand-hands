@@ -12,6 +12,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 
+/********************************************************************
+ * 			MainController - Covid-19 Donation app
+ ********************************************************************
+ *Purpose:
+ *		Main Controller for the first view of Thousand-Hands app.
+ *	    Primarily contains logic to switch views based on the user's
+ *		selection.
+ *
+ *Notes:
+ *		A simple refactor from lab4 into a new controller file  
+ *
+ *
+ ********************************************************************
+ */
+
 public class MainController {
 	
 	

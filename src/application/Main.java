@@ -13,8 +13,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			//Models.initInventory();
-			Models.loadFile();
+			//Models.initInventory(); (uncomment to initialize inventory if none exists)
+			Models.loadFile();    //loads the saved data.properties file
 			
 			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
 			Scene scene = new Scene(root,600,600);

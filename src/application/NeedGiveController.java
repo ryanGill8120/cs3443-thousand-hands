@@ -382,7 +382,6 @@ public class NeedGiveController {
     		String user = userField.getText();
         	String item = productField.getText();
         	String amount = quantityField.getText();
-        	//Integer.valueOf();
         	
         	//flags
         	boolean exists = false, found = false;
@@ -390,10 +389,7 @@ public class NeedGiveController {
         	//on Need View
     		if (Models.need == true) {
     			
-    			//the ArrayLists for user, item, and quantity data are all the same size
-    			//int i = 0;
-    			
-    			//iterates over arrays
+    			//iterates over HashMap
     			for (Entry<String, String> entry: Models.hash.entrySet())  {
     				
     				//if a matching item name is found
@@ -405,9 +401,11 @@ public class NeedGiveController {
     						
     						//Donation is possible
     						int difference = (int)Integer.parseInt(entry.getValue()) - (int)Integer.parseInt(amount);  //deduction from inventory
+    						
+    						//replaces the amount of the item with the difference after user received a donation
     						Models.hash.replace(item, "" + difference);
     						Models.prop.putAll(Models.hash);
-    						Models.prop.store(writer,null);
+    						Models.prop.store(writer,null);  //writes to file
     						
     						//clears input fields
     						userField.clear();
@@ -423,8 +421,7 @@ public class NeedGiveController {
     					}else
     						found = true;
     				}
-    				//i++;	//conditions finished, increment LCV
-    			}//end while
+    			}//end HashMap iteration
     			
     			
     			//item is not in inventory
@@ -442,14 +439,20 @@ public class NeedGiveController {
     		
     		//On Give View
     		}else {
+    			
+    			//checks if item is already in inventory, then adds user's amount to current value
     			if (Models.hash.containsKey(item)) {
     				int add = (int)Integer.parseInt(amount);
     				Models.hash.replace(item, "" + (add + (int)Integer.parseInt(Models.hash.get(item))));
     				a.setContentText("You have added " + item + " (x" + amount + ") to existing inventory.\nThank you " + user + "!");
+    				
+    			//otherwise creates a new entry
     			}else {
     				Models.hash.put(item, amount);
     				a.setContentText("You have donated " + item + " (x" + amount + ")\nThank you " + user + "!");
     			}
+    			
+    			//writes to file and clears input fields
     			Models.prop.putAll(Models.hash);
     			Models.prop.store(writer,null);
     			userField.clear();

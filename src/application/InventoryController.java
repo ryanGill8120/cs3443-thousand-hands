@@ -88,17 +88,16 @@ public class InventoryController {
     	
     	//manages lists
     	inventoryList.getItems().clear();
-    	Models.obsInventory.clear();
     	
-    	//empty string for transfer from three ArrayList to one ObservableList
+    	//empty string for transfer from HashMap to ObservableList
     	//this type is required for ListView by JavaFX
     	String data = "";
     	
-    	//ArrayLists are same size
+    	//if there is inventory
     	if (Models.hash.size() > 0) {
 	    	for (Entry<String, String> entry: Models.hash.entrySet()) {
 	    		
-	    		//sets data string by concatenating strings from ArrayLists
+	    		//sets data string by concatenating strings from HashMap key and value
 	    		data = entry.getKey() + " (x" + entry.getValue() + ")";
 	    		Models.obsInventory.add(data);	//adds string to the ObservableList
 	    	}
@@ -127,10 +126,10 @@ public class InventoryController {
    	 *	Decorator:
    	 *		FXML 
    	 *	
-   	 *	Basic Linear-Search of inventory
+   	 *	Basic Search of inventory using HashMap
    	 *	Displays on the ListView any items found matching the user's
    	 *	input, displays blank otherwise. Handles input errors and can 
-   	 *	search for the username, item name, or both. 
+   	 *	searches for the item name 
    	 *	
    	 *****************************************************************
    	 */
@@ -139,7 +138,6 @@ public class InventoryController {
     	
     	//manages lists
     	inventoryList.getItems().clear();
-    	Models.obsInventory.clear();
     	
     	//local declarations
     	Alert a = new Alert(AlertType.ERROR);
