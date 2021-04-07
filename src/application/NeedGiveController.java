@@ -1,7 +1,10 @@
 package application;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,15 +52,9 @@ public class NeedGiveController {
 	//class attributes. They must be static since calling the scene change
 	//methods reinstatiates the class, static variables allows the data to 
 	//remain intact
-	private static boolean need = true;
-	private static ArrayList<String> users = new ArrayList<String>();
-	private static ArrayList<String> items = new ArrayList<String>();
-	private static ArrayList<Integer> amounts = new ArrayList<Integer>();
-	private static ObservableList<String> obsInventory = FXCollections.observableArrayList();
-	
 	
 	/*********************************************
-	 * 				verifyText()
+	 * 				verifyUser()
 	 *********************************************
 	 *
 	 *	Parameters:
@@ -66,24 +63,30 @@ public class NeedGiveController {
 	 *		boolean
 	 *
 	 *	Tests if text is a valid String for use
-	 *  as a username or product name. Checks if
-	 *  the string contains at least one alphabetical
-	 *  character
+	 *  as a username. Checks if
+	 *  the string is in the form abc123
 	 *********************************************
 	 */
-	public boolean verifyText(String text) {
+	public boolean verifyUser(String text) {
 		
-		//empty field
-		if (text.length() == 0)
-			return false;
+		boolean valid = true;
+		//empty field or too long
+		if (text.length() == 0 || text.length() > 6)
+			valid = false;
 		
 		//checks for at least one alphabetical char
 		for (int i = 0; i < text.length(); i++) {
 			char c = text.charAt(i);
-			if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-				return true;
+			if (i < 3) {
+				if (!(c >= 'a' && c <= 'z'))
+					valid = false;
+			}else{
+				if (!(c >= '0' && c <= '9'))
+					valid = false;
+			}
+			
 		}
-		return false;   //no alphabetical char found
+		return valid;   //no alphabetical char found
 	}
 	
 	/*********************************************
@@ -93,7 +96,7 @@ public class NeedGiveController {
 	 *	Parameters: 
 	 *		text: String
 	 *	Return Type: 
-	 *		double
+	 *		boolean
 	 *
 	 *	Checks if the text string is valid for use
 	 *	in the item quantity field. Invalid if the 
@@ -115,184 +118,34 @@ public class NeedGiveController {
 		return true;
 	}
 	
+	/*********************************************
+	 * 				verifyProduct()
+	 *********************************************
+	 *
+	 *	Parameters: 
+	 *		text: String
+	 *	Return Type: 
+	 *		boolean
+	 *
+	 *	Checks if the text string is valid for use
+	 *	in the item quantity field. Invalid if the 
+	 *	string cannot be parsed to an int
+	 *********************************************
+	 */
 	
-	//Main.FXML elements
+	public boolean verifyProduct(String text) {
+		//empty
+		if (text.length() == 0)
+			return false;
+		for (int i = 0; i < text.length(); i++) {
+			char c = text.charAt(i);
+			if (!(c == ' '|| (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')))
+				return false;
+		}
+		return true;
+	}
 	
-	@FXML
-	private AnchorPane root;
 	
-	@FXML
-    private Button needBtn;
-
-    @FXML
-    private Button giveBtn;
-
-    @FXML
-    private Button inventoryBtn;
-    
-    @FXML
-    private Label needLabel;
-    
-    @FXML
-    private Button mainHomeBtn;
-    
-    @FXML
-    private Button aboutBtn;
-    
-    @FXML
-    private AnchorPane homeAnchor;
-    
-    /*****************************************************************
-	 * 				mainToNeed()
-	 *****************************************************************
-	 *
-	 *	Parameters: 
-	 *		event: ActionEvent - need button pressed
-	 *	Return Type:
-	 *		none
-	 *	Decorator:
-	 *		FXML 
-	 *	
-	 *	Switches the scene from the Main view to the NeedGive view
-	 *	Does so by instantiating a new AnchorPane (the parent element 
-	 *	of each view hierarchy) then makes some style changes based on
-	 *	the users selection of need. Flips the need tag as well so the
-	 *	program can allow the user to receive a donation
-	 *	
-	 *****************************************************************
-	 */
-
-    @FXML
-    void mainToNeed(ActionEvent event) throws IOException {
-    	
-    	//sets the static flag
-    	need = true;
-    	
-    	//new AnchorPane object with view we want to load 
-    	AnchorPane pane = FXMLLoader.load(getClass().getResource("NeedGive.fxml"));
-    	
-    	//style changes, elements must be accessed directly from the new object.
-    	//the class attributes seem inaccessible with getter methods, (I get a 
-    	//null-pointer error) the getChildren methods allow you to traverse the child
-    	//objects of the AnchorPane object
-    	pane.setStyle("-fx-background-color: #f58994;");
-    	Node outer = pane.getChildren().get(0);
-    	for (Node inner: ((AnchorPane)outer).getChildren()) {
-    		if (inner instanceof Label) {
-    			((Label) inner).setText("We're here to help!");
-    		}
-    	}
-    	
-    	//sets the scene using modified object by accessing the current scene's children
-    	root.getChildren().setAll(pane);
-    }
-    
-    /*****************************************************************
-	 * 				mainToGive()
-	 *****************************************************************
-	 *
-	 *	Parameters: 
-	 *		event: ActionEvent - give button pressed
-	 *	Return Type:
-	 *		none
-	 *	Decorator:
-	 *		FXML 
-	 *	
-	 *	Switches the scene from the Main view to the NeedGive view
-	 *	Does so by instantiating a new AnchorPane (the parent element 
-	 *	of each view hierarchy) then makes some style changes based on
-	 *	the users selection of give. Flips the need tag as well so the
-	 *	program can allow the user to make a donation. Logic identical
-	 *	to mainToNeed(), but sets style and need flag appropriately
- 	 *	
-	 *****************************************************************
-	 */
-
-    @FXML
-    void mainToGive(ActionEvent event) throws IOException {
-    	
-    	//sets the static flag
-    	need = false;
-    	
-    	//new AnchorPane object with view we want to load 
-    	AnchorPane pane = FXMLLoader.load(getClass().getResource("NeedGive.fxml"));
-    	
-    	//style changes, elements must be accessed directly from the new object.
-    	//the class attributes seem inaccessible with getter methods, (I get a 
-    	//null-pointer error) the getChildren methods allow you to traverse the child
-    	//objects of the AnchorPane object
-    	pane.setStyle("-fx-background-color: #83fc83;");
-    	Node outer = pane.getChildren().get(0);
-    	for (Node inner: ((AnchorPane)outer).getChildren()) {
-    		if (inner instanceof Label) {
-    			((Label) inner).setText("Thank you for donating!");
-    		}
-    	}
-    	
-    	//sets the scene using modified object by accessing the current scene's children
-    	root.getChildren().setAll(pane);
-    	
-
-    }
-    
-    /*****************************************************************
-	 * 				mainToInventory()
-	 *****************************************************************
-	 *
-	 *	Parameters: 
-	 *		event: ActionEvent - inventory button pressed
-	 *	Return Type:
-	 *		none
-	 *	Decorator:
-	 *		FXML 
-	 *	
-	 *	Switches the scene from the Main view to the Inventory view
-	 *	Does so by instantiating a new AnchorPane (the parent element 
-	 *	of each view hierarchy) 
- 	 *	
-	 *****************************************************************
-	 */
-
-    @FXML
-    void mainToInventory(ActionEvent event) throws IOException {
-    	
-    	AnchorPane pane = FXMLLoader.load(getClass().getResource("Inventory.fxml"));
-    	root.getChildren().setAll(pane);
-
-    }
-    
-    /*****************************************************************
-	 * 				viewAbout()
-	 *****************************************************************
-	 *
-	 *	Parameters: 
-	 *		event: ActionEvent - about button pressed
-	 *	Return Type:
-	 *		none
-	 *	Decorator:
-	 *		FXML 
-	 *	
-	 *	Shows an alert containing about information and directions about
-	 *  the application.
- 	 *	
-	 *****************************************************************
-	 */
-    @FXML
-    void viewAbout(ActionEvent event) {
-    	
-    	//Instantiates an alert object and sets its text
-    	Alert a = new Alert(AlertType.INFORMATION);
-    	String output = "A-Thousand-Hands Donations is an application that helps those in need during the COVID-19 pandemic. ";
-    	output += "Offer a donation using the Give Button, or press the Need Button if you require supplies";
-    	a.setHeaderText("About A-Thousand-Hands Donations");
-    	a.setContentText(output);
-    	a.show();   //displays the alert
-    }
-    
-    
-    
-    
-    //NeedGive.FXML elements
     
     @FXML
     private AnchorPane needGivePane;
@@ -402,13 +255,13 @@ public class NeedGiveController {
 	   	a.setHeaderText("User ID");
 	   	
 	   	//valid username
-    	if (verifyText(text)) {
+    	if (verifyUser(text)) {
     		a.setContentText("User ID is valid!");
     		
     	//invalid 
     	}else {
     		a.setAlertType(AlertType.ERROR);
-    		a.setContentText("User ID is invalid, please use some alphabetical characters");
+    		a.setContentText("User ID is invalid, please enter username in the format:\n\nabc123");
     	}
     	a.show();	//displays alert after condition
     }
@@ -438,13 +291,13 @@ public class NeedGiveController {
 	   	a.setHeaderText("Product");
 	   	
 	   	//valid item
-    	if (verifyText(text)) {
+    	if (verifyProduct(text)) {
     		a.setContentText("Product Name is valid!");
     		
     	//invalid
     	}else {
     		a.setAlertType(AlertType.ERROR);
-    		a.setContentText("Product Name is invalid, please use some alphabetical characters");
+    		a.setContentText("Product Name is invalid, please use only alphabetical and numerical characters");
     	}
     	a.show();  //displays alert
     }
@@ -507,48 +360,54 @@ public class NeedGiveController {
 	 *	if the item is available. The result to the user will be some
 	 *	alerts describing the donation, but the back end will still 
 	 *	process the inventory accordingly 
+     * @throws IOException 
  	 *	
 	 *****************************************************************
 	 */
     @FXML
-    void process(ActionEvent event) {
+    void process(ActionEvent event) throws IOException {
   
+    	//System.out.println(Models.hash);
     	//makes alert object
     	Alert a = new Alert(AlertType.CONFIRMATION);
+    	FileOutputStream writer = new FileOutputStream(Models.file,true);
     	a.setHeaderText("Donation Complete!");
     	
     	//checks for valid input in all fields
-    	if (verifyText(userField.getText()) && 
-    		verifyText(productField.getText()) && 
+    	if (verifyUser(userField.getText()) && 
+    		verifyProduct(productField.getText()) && 
     		verifyInt(quantityField.getText())) {
     		
     		//assigns variables to fields if they are valid
     		String user = userField.getText();
         	String item = productField.getText();
-        	Integer amount = Integer.valueOf(quantityField.getText());
+        	String amount = quantityField.getText();
+        	//Integer.valueOf();
         	
         	//flags
         	boolean exists = false, found = false;
     		
         	//on Need View
-    		if (need == true) {
+    		if (Models.need == true) {
     			
     			//the ArrayLists for user, item, and quantity data are all the same size
-    			int i = 0;
+    			//int i = 0;
     			
     			//iterates over arrays
-    			while(i < items.size()) {
+    			for (Entry<String, String> entry: Models.hash.entrySet())  {
     				
     				//if a matching item name is found
-    				if (items.get(i).equals(item)) {
+    				if (entry.getKey().equalsIgnoreCase(item)) {
     					exists = true;
     					
-    					//if the amounts are also the same
-    					if (amounts.get(i).intValue() >= amount.intValue()) {
+    					//if there is enough inventory
+    					if ((int)Integer.parseInt(entry.getValue()) >= (int)Integer.parseInt(amount)) {
     						
     						//Donation is possible
-    						Integer difference = amounts.get(i) - amount;  //deduction from inventory
-    						amounts.set(i, difference);
+    						int difference = (int)Integer.parseInt(entry.getValue()) - (int)Integer.parseInt(amount);  //deduction from inventory
+    						Models.hash.replace(item, "" + difference);
+    						Models.prop.putAll(Models.hash);
+    						Models.prop.store(writer,null);
     						
     						//clears input fields
     						userField.clear();
@@ -556,15 +415,15 @@ public class NeedGiveController {
     		    			quantityField.clear();
     		    			
     		    			//alert message for donation
-    						a.setContentText("You have received " + item + " (x" + amount + ") from user: " + users.get(i) + ".\nBe well, " + user + "!");
-    						break;  //stops the iteration, always gives first item found
+    						a.setContentText("You have received " + item + " (x" + amount + ")\nBe well, " + user + "!");
+    						//break;  //stops the iteration, always gives first item found
     						
     					
     					//if the item is found, but there is not enough inventory
     					}else
     						found = true;
     				}
-    				i++;	//conditions finished, increment LCV
+    				//i++;	//conditions finished, increment LCV
     			}//end while
     			
     			
@@ -583,13 +442,20 @@ public class NeedGiveController {
     		
     		//On Give View
     		}else {
-    			users.add(user);
-    			items.add(item);
-    			amounts.add(amount);
+    			if (Models.hash.containsKey(item)) {
+    				int add = (int)Integer.parseInt(amount);
+    				Models.hash.replace(item, "" + (add + (int)Integer.parseInt(Models.hash.get(item))));
+    				a.setContentText("You have added " + item + " (x" + amount + ") to existing inventory.\nThank you " + user + "!");
+    			}else {
+    				Models.hash.put(item, amount);
+    				a.setContentText("You have donated " + item + " (x" + amount + ")\nThank you " + user + "!");
+    			}
+    			Models.prop.putAll(Models.hash);
+    			Models.prop.store(writer,null);
     			userField.clear();
     			productField.clear();
     			quantityField.clear();
-    			a.setContentText("You have donated " + item + " (x" + amount + ")\nThank you " + user + "!");
+    			
     		}
     		
     	//One or more input fields is invalid
@@ -603,180 +469,6 @@ public class NeedGiveController {
     	a.show();
 
     }
-    
-
-    
-    
-    
-    //Inventory.FXML elements
-    
-    @FXML
-    private AnchorPane inventoryPane;
-    
-    @FXML
-    private Button invHomeBtn;
-    
-    @FXML
-    private Button invInventoryBtn;
-    
-    @FXML
-    private Button searchBtn;
-    
-    @FXML
-    private Button showAllBtn;
-    
-    @FXML
-    private TextField userSearch;
-    
-    @FXML
-    private TextField itemSearch;
-    
-    @FXML
-    private ListView<String> inventoryList;
-    
-
-    /*****************************************************************
-	 * 				inventoryToHome()
-	 *****************************************************************
-	 *
-	 *	Parameters: 
-	 *		event: ActionEvent - home button pressed
-	 *	Return Type:
-	 *		none
-	 *	Decorator:
-	 *		FXML 
-	 *	
-	 *	Switches the scene from the inventory view to the Main view
-	 *	Does so by instantiating a new AnchorPane (the parent element 
-	 *	of each view hierarchy) 
- 	 *	
-	 *****************************************************************
-	 */
-    @FXML
-    void inventoryToHome(ActionEvent event) throws IOException {
-    	
-    	AnchorPane pane = FXMLLoader.load(getClass().getResource("Main.fxml"));
-    	inventoryPane.getChildren().setAll(pane);
-
-    }
-    
-    /*****************************************************************
-	 * 				showAll()
-	 *****************************************************************
-	 *
-	 *	Parameters: 
-	 *		event: ActionEvent - show all button pressed
-	 *	Return Type:
-	 *		none
-	 *	Decorator:
-	 *		FXML 
-	 *	
-	 *	Shows all the items in inventory on the ListView element
-	 *	if there is nothing in inventory, an alert will apear
- 	 *	
-	 *****************************************************************
-	 */
-    @FXML
-    void showAll(ActionEvent event) {
-    	
-    	//manages lists
-    	inventoryList.getItems().clear();
-    	obsInventory.clear();
-    	
-    	//empty string for transfer from three ArrayList to one ObservableList
-    	//this type is required for ListView by JavaFX
-    	String data = "";
-    	
-    	//ArrayLists are same size
-    	if (users.size() > 0) {
-	    	for (int i = 0; i < users.size(); i++) {
-	    		
-	    		//sets data string by concatenating strings from ArrayLists
-	    		data = items.get(i) + " (x" + amounts.get(i) + ") Donated by: " + users.get(i);
-	    		obsInventory.add(data);	//adds string to the ObservableList
-	    	}
-	    	
-	    	//sets the ListView based on the ObservableList
-	    	inventoryList.setItems(obsInventory);
-	    	
-	    //empty inventory
-    	}else {
-    		Alert a = new Alert(AlertType.ERROR);
-    		a.setHeaderText("Inventory is empty");
-    		a.setContentText("Try donating an item!");
-    		a.show();
-    	}
-    	
-    }
-    
-    /*****************************************************************
-   	 * 				searchInventory()
-   	 *****************************************************************
-   	 *
-   	 *	Parameters: 
-   	 *		event: ActionEvent - search button pressed
-   	 *	Return Type:
-   	 *		none
-   	 *	Decorator:
-   	 *		FXML 
-   	 *	
-   	 *	Basic Linear-Search of inventory
-   	 *	Displays on the ListView any items found matching the user's
-   	 *	input, displays blank otherwise. Handles input errors and can 
-   	 *	search for the username, item name, or both. 
-   	 *	
-   	 *****************************************************************
-   	 */
-    @FXML
-    void searchInventory(ActionEvent event) {
-    	
-    	//manages lists
-    	inventoryList.getItems().clear();
-    	obsInventory.clear();
-    	
-    	//local declarations
-    	Alert a = new Alert(AlertType.ERROR);
-    	a.setHeaderText("No data found");
-    	String userData = userSearch.getText(), itemData = itemSearch.getText(), data = "";
-    	
-    	//if both fields are empty
-    	if (userData.equals("") && itemData.equals("")) {
-    		a.setContentText("Please enter something in the search fields");
-    		a.show();
-    		
-    	//if only item is given
-    	}else if(userData.equals("")) {
-    		for (int i = 0; i < users.size(); i++) {
-    			if (items.get(i).equals(itemData)) {
-    				data = items.get(i) + " (x" + amounts.get(i) + ") Donated by: " + users.get(i);
-    				obsInventory.add(data);
-    			}
-    		}
-    	
-    	//if only user name has been given
-    	}else if(itemData.equals("")) {
-    		for (int i = 0; i < users.size(); i++) {
-    			if(users.get(i).equals(userData)) {
-    				data = items.get(i) + " (x" + amounts.get(i) + ") Donated by: " + users.get(i);
-    				obsInventory.add(data);
-    			}
-    		}
-    	
-    	//if both user name and item are given
-    	}else if (itemData.length() > 0 && userData.length() > 0){
-    		for (int i = 0; i < users.size(); i++) {
-    			if (users.get(i).equals(userData) && items.get(i).equals(itemData)) {
-    				data = items.get(i) + " (x" + amounts.get(i) + ") Donated by: " + users.get(i);
-    				obsInventory.add(data);
-    			}
-    		}
-    		
-    	}
-    	
-    	//sets InventoryList object to the data in the ObservableList object
-    	inventoryList.setItems(obsInventory);
-    	
-    }
-	
 }
+
 
