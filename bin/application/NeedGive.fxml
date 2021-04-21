@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="needGivePane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.NeedGiveController">
+   <children>
+      <AnchorPane prefHeight="600.0" prefWidth="600.0" stylesheets="@../../bin/application/application.css">
+         <children>
+            <Button fx:id="needHomeBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#needToMain" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Home" />
+               </tooltip></Button>
+            <Button fx:id="needInvBtn" layoutX="129.0" layoutY="14.0" mnemonicParsing="false" onAction="#needToInv" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Inventory" />
+               </tooltip></Button>
+            <TextField fx:id="userField" layoutX="220.0" layoutY="140.0" prefHeight="100.0" prefWidth="326.0" promptText="Enter User Name">
+               <font>
+                  <Font size="25.0" />
+               </font></TextField>
+            <TextField fx:id="productField" layoutX="220.0" layoutY="251.0" prefHeight="100.0" prefWidth="326.0" promptText="Enter Product Name">
+               <font>
+                  <Font size="25.0" />
+               </font></TextField>
+            <TextField fx:id="quantityField" layoutX="220.0" layoutY="363.0" prefHeight="100.0" prefWidth="326.0" promptText="Enter Product Amount">
+               <font>
+                  <Font size="25.0" />
+               </font></TextField>
+            <Button fx:id="userBtn" layoutX="77.0" layoutY="140.0" mnemonicParsing="false" onAction="#checkUser" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Check Username" />
+               </tooltip></Button>
+            <Button fx:id="productBtn" layoutX="77.0" layoutY="251.0" mnemonicParsing="false" onAction="#checkProduct" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Check Item Name" />
+               </tooltip></Button>
+            <Button fx:id="quantityBtn" layoutX="77.0" layoutY="363.0" mnemonicParsing="false" onAction="#checkQuantity" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Check Quantity" />
+               </tooltip></Button>
+            <Button fx:id="addSubBtn" layoutX="235.0" layoutY="486.0" mnemonicParsing="false" onAction="#process" prefHeight="100.0" prefWidth="130.0" stylesheets="@../../bin/application/application.css">
+               <tooltip>
+                  <Tooltip text="Process Donation" />
+               </tooltip></Button>
+            <Label fx:id="needLabel" layoutX="272.0" layoutY="46.0" text="Label">
+               <font>
+                  <Font size="30.0" />
+               </font></Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
